@@ -38,7 +38,7 @@ class Sabre_VObject_ComponentTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('Sabre_VObject_Component', $event);
         $this->assertEquals('VEVENT', $event->name);
 
-        $this->assertInternalType('null', $comp->vjournal);
+        $this->assertType('null', $comp->vjournal);
 
     }
 

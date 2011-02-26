@@ -37,7 +37,7 @@ class Sabre_VObject_PropertyTest extends PHPUnit_Framework_TestCase {
         $property = new Sabre_VObject_Property('propname','propvalue');
         $property->parameters[] = new Sabre_VObject_Parameter('paramname','paramvalue');
         
-        $this->assertInternalType('null',$property['foo']);
+        $this->assertType('null',$property['foo']);
 
     }
 
