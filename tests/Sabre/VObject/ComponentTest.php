@@ -123,7 +123,7 @@ class Sabre_VObject_ComponentTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(2,count($comp->children()));
         $this->assertTrue($comp->vevent[1] instanceof Sabre_VObject_Component);
-        $this->assertEquals('Event 2', (string)$comp->vevent[1]->summary);
+        $this->assertEquals('Event 2', $comp->vevent[1]->summary->__toString());
 
     }
 

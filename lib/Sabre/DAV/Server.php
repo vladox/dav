@@ -560,7 +560,7 @@ class Sabre_DAV_Server {
                 if (!isset($httpHeaders['Last-Modified'])) $ignoreRangeHeader = true;
                 else {
                     $modified = new Sabre_DateTime($httpHeaders['Last-Modified']);
-                    if($modified > $ifRangeDate) $ignoreRangeHeader = true;
+                    if($modified->getTimeStamp() > $ifRangeDate->getTimeStamp()) $ignoreRangeHeader = true;
                 }
 
             } catch (Exception $e) {

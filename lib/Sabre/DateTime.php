@@ -51,8 +51,14 @@ class Sabre_DateTime {
      */
     public function __construct($timeStr, Sabre_DateTimeZone $timezone = null) {
 
+        $TZ = date_default_timezone_get();
+        if ($timezone) date_default_timezone_set($timezone->getName()); 
+
         $this->time = strtotime($timeStr);
+        if (!$this->time) throw new Exception("'$timeStr' is not a valid date string");
         $this->timezone = $timezone;
+
+        date_default_timezone_set($TZ);
 
     }
 
@@ -78,7 +84,9 @@ class Sabre_DateTime {
      */
     public function modify($newDate) {
 
-        $this->time = strtotime($newDate, $this->time);
+        $newTime = strtotime($newDate, $this->time);
+        if (!$newTime) throw new Exception("'$timeStr' is not a valid date string");
+        $this->time = $newTime;
 
     }
 
@@ -91,6 +99,17 @@ class Sabre_DateTime {
     public function format($format) {
 
         return date($format, $this->time);
+
+    }
+
+    /**
+     * Returns the unix timestamp for this date 
+     * 
+     * @return int 
+     */
+    public function getTimeStamp() {
+
+        return $this->time;
 
     }
 

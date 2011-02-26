@@ -8,7 +8,6 @@ class Sabre_VObject_PropertyTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('PROPNAME', $property->name);
         $this->assertEquals('propvalue', $property->value);
         $this->assertEquals('propvalue', $property->__toString());
-        $this->assertEquals('propvalue', (string)$property);
 
     }
 
