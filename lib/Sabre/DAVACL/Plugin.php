@@ -1070,7 +1070,7 @@ class Sabre_DAVACL_Plugin extends Sabre_DAV_ServerPlugin {
                 }
 
                 if (isset($lookupResult[200][$searchProperty]) &&
-                    mb_stripos($lookupResult[200][$searchProperty], $searchValue, 0, 'UTF-8')!==false) {
+                    mb_strpos(mb_strtolower($lookupResult[200][$searchProperty],'UTF-8'), mb_strtolower($searchValue, 'UTF-8'), 0, 'UTF-8')!==false) {
                         $matches[] = $lookupResult['href'];
                 }
 
