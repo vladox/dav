@@ -122,10 +122,10 @@ class Sabre_CalDAV_XMLUtil {
      * returned DateTime object will still be in the UTC timezone.
      *
      * @param string $dt 
-     * @param DateTimeZone $tz 
-     * @return DateTime 
+     * @param Sabre_DateTimeZone $tz 
+     * @return Sabre_DateTime 
      */
-    static public function parseICalendarDateTime($dt,DateTimeZone $tz = null) {
+    static public function parseICalendarDateTime($dt,Sabre_DateTimeZone $tz = null) {
 
         // Format is YYYYMMDD + "T" + hhmmss 
         $result = preg_match('/^([1-3][0-9]{3})([0-1][0-9])([0-3][0-9])T([0-2][0-9])([0-5][0-9])([0-5][0-9])([Z]?)$/',$dt,$matches);
@@ -135,22 +135,21 @@ class Sabre_CalDAV_XMLUtil {
         }
 
         if ($matches[7]==='Z' || is_null($tz)) {
-            $tz = new DateTimeZone('UTC');
+            $tz = new Sabre_DateTimeZone('UTC');
         } 
-        $date = new DateTime($matches[1] . '-' . $matches[2] . '-' . $matches[3] . ' ' . $matches[4] . ':' . $matches[5] .':' . $matches[6], $tz);
+        $date = new Sabre_DateTime($matches[1] . '-' . $matches[2] . '-' . $matches[3] . ' ' . $matches[4] . ':' . $matches[5] .':' . $matches[6], $tz);
 
         // Still resetting the timezone, to normalize everything to UTC
-        $date->setTimeZone(new DateTimeZone('UTC'));
+        $date->setTimeZone(new Sabre_DateTimeZone('UTC'));
         return $date;
 
     }
 
     /**
-     * Parses an iCalendar (rfc5545) formatted datetime and returns a DateTime object
+     * Parses an iCalendar (rfc5545) formatted datetime and returns a Sabre_DateTime object
      *
      * @param string $date 
-     * @param DateTimeZone $tz 
-     * @return DateTime 
+     * @return Sabre_DateTime 
      */
     static public function parseICalendarDate($date) {
 
@@ -161,7 +160,7 @@ class Sabre_CalDAV_XMLUtil {
             throw new Sabre_DAV_Exception_BadRequest('The supplied iCalendar date value is incorrect: ' . $date);
         }
 
-        $date = new DateTime($matches[1] . '-' . $matches[2] . '-' . $matches[3], new DateTimeZone('UTC'));
+        $date = new Sabre_DateTime($matches[1] . '-' . $matches[2] . '-' . $matches[3], new Sabre_DateTimeZone('UTC'));
         return $date;
 
     }

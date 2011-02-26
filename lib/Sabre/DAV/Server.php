@@ -550,16 +550,16 @@ class Sabre_DAV_Server {
         // the precondition.
         if ($nodeSize && $range && $ifRange) {
              
-            // if IfRange is parsable as a date we'll treat it as a DateTime
+            // if IfRange is parsable as a date we'll treat it as a Sabre_DateTime
             // otherwise, we must treat it as an etag.
             try {
-                $ifRangeDate = new DateTime($ifRange);
+                $ifRangeDate = new Sabre_DateTime($ifRange);
                
                 // It's a date. We must check if the entity is modified since
                 // the specified date.
                 if (!isset($httpHeaders['Last-Modified'])) $ignoreRangeHeader = true;
                 else {
-                    $modified = new DateTime($httpHeaders['Last-Modified']);
+                    $modified = new Sabre_DateTime($httpHeaders['Last-Modified']);
                     if($modified > $ifRangeDate) $ignoreRangeHeader = true;
                 }
 
@@ -1228,7 +1228,7 @@ class Sabre_DAV_Server {
 
             // GetLastModified gets special cased 
             } elseif ($properties[$property] instanceof Sabre_DAV_Property_GetLastModified) {
-                $headers[$header] = $properties[$property]->getTime()->format(DateTime::RFC1123);
+                $headers[$header] = $properties[$property]->getTime()->format(Sabre_DateTime::RFC1123);
             }
 
         }
@@ -1767,7 +1767,7 @@ class Sabre_DAV_Server {
                 }
                 $lastMod = $node->getLastModified();
                 if ($lastMod) {
-                    $lastMod = new DateTime('@' . $lastMod);
+                    $lastMod = new Sabre_DateTime('@' . $lastMod);
                     if ($lastMod <= $date) {
                         $this->httpResponse->sendStatus(304);
                         return false;
@@ -1789,7 +1789,7 @@ class Sabre_DAV_Server {
                 }   
                 $lastMod = $node->getLastModified();
                 if ($lastMod) {
-                    $lastMod = new DateTime('@' . $lastMod);
+                    $lastMod = new Sabre_DateTime('@' . $lastMod);
                     if ($lastMod > $date) {
                         throw new Sabre_DAV_Exception_PreconditionFailed('An If-Unmodified-Since header was specified, but the entity has been changed since the specified date.','If-Unmodified-Since');
                     }

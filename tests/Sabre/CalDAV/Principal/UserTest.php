@@ -35,7 +35,7 @@ class Sabre_CalDAV_Principal_UserTest extends PHPUnit_Framework_TestCase {
 
         $u = $this->getInstance();
         $child = $u->getChild('calendar-proxy-read');
-        $this->assertInstanceOf('Sabre_CalDAV_Principal_ProxyRead', $child);
+        $this->assertType('Sabre_CalDAV_Principal_ProxyRead', $child);
 
     }
 
@@ -43,7 +43,7 @@ class Sabre_CalDAV_Principal_UserTest extends PHPUnit_Framework_TestCase {
 
         $u = $this->getInstance();
         $child = $u->getChild('calendar-proxy-write');
-        $this->assertInstanceOf('Sabre_CalDAV_Principal_ProxyWrite', $child);
+        $this->assertType('Sabre_CalDAV_Principal_ProxyWrite', $child);
 
     }
 
@@ -62,8 +62,8 @@ class Sabre_CalDAV_Principal_UserTest extends PHPUnit_Framework_TestCase {
         $u = $this->getInstance();
         $children = $u->getChildren();
         $this->assertEquals(2, count($children));
-        $this->assertInstanceOf('Sabre_CalDAV_Principal_ProxyRead', $children[0]);
-        $this->assertInstanceOf('Sabre_CalDAV_Principal_ProxyWrite', $children[1]);
+        $this->assertType('Sabre_CalDAV_Principal_ProxyRead', $children[0]);
+        $this->assertType('Sabre_CalDAV_Principal_ProxyWrite', $children[1]);
 
     }
 

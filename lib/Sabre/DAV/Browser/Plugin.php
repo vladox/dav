@@ -219,7 +219,7 @@ class Sabre_DAV_Browser_Plugin extends Sabre_DAV_ServerPlugin {
         if (!$type) $type = 'Unknown';
 
         $size = isset($file[200]['{DAV:}getcontentlength'])?(int)$file[200]['{DAV:}getcontentlength']:'';
-        $lastmodified = isset($file[200]['{DAV:}getlastmodified'])?$file[200]['{DAV:}getlastmodified']->getTime()->format(DateTime::ATOM):'';
+        $lastmodified = isset($file[200]['{DAV:}getlastmodified'])?$file[200]['{DAV:}getlastmodified']->getTime()->format(Sabre_DateTime::ATOM):'';
 
         $fullPath = Sabre_DAV_URLUtil::encodePath('/' . trim($this->server->getBaseUri() . ($path?$path . '/':'') . $name,'/'));
 

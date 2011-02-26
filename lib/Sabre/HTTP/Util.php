@@ -18,7 +18,7 @@ class Sabre_HTTP_Util {
      * This method returns false if the date is invalid
      * 
      * @param string $dateHeader 
-     * @return bool|DateTime 
+     * @return bool|Sabre_DateTime 
      */
     static function parseHTTPDate($dateHeader) {
 
@@ -56,7 +56,7 @@ class Sabre_HTTP_Util {
         $realDate = strtotime($dateHeader);
         //strtotime can return -1 or false in case of error
         if ($realDate !== false && $realDate >= 0)
-            return new DateTime('@' . $realDate, new DateTimeZone('UTC'));
+            return new Sabre_DateTime('@' . $realDate, new Sabre_DateTimeZone('UTC'));
 
         return false;
 

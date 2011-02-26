@@ -16,7 +16,7 @@ class Sabre_VObject_ComponentTest extends PHPUnit_Framework_TestCase {
         foreach($comp->children() as $key=>$subcomponent) {
 
            $count++;
-           $this->assertInstanceOf('Sabre_VObject_Component',$subcomponent);
+           $this->assertType('Sabre_VObject_Component',$subcomponent);
 
         }
         $this->assertEquals(2,$count);
@@ -35,7 +35,7 @@ class Sabre_VObject_ComponentTest extends PHPUnit_Framework_TestCase {
         $comp->children[] = $sub;
 
         $event = $comp->vevent;
-        $this->assertInstanceOf('Sabre_VObject_Component', $event);
+        $this->assertType('Sabre_VObject_Component', $event);
         $this->assertEquals('VEVENT', $event->name);
 
         $this->assertType('null', $comp->vjournal);
@@ -63,7 +63,7 @@ class Sabre_VObject_ComponentTest extends PHPUnit_Framework_TestCase {
         $comp = new Sabre_VObject_Component('VCALENDAR');
         $comp->myProp = 'myValue';
 
-        $this->assertInstanceOf('Sabre_VObject_Property',$comp->MYPROP); 
+        $this->assertType('Sabre_VObject_Property',$comp->MYPROP); 
         $this->assertEquals('myValue',$comp->MYPROP->value); 
 
     
@@ -76,7 +76,7 @@ class Sabre_VObject_ComponentTest extends PHPUnit_Framework_TestCase {
         $comp->myProp = 'myValue';
 
         $this->assertEquals(1,count($comp->children));
-        $this->assertInstanceOf('Sabre_VObject_Property',$comp->MYPROP); 
+        $this->assertType('Sabre_VObject_Property',$comp->MYPROP); 
         $this->assertEquals('myValue',$comp->MYPROP->value); 
 
     }
