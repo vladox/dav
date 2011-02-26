@@ -217,7 +217,7 @@ class Sabre_DAV_Server {
                 $error->appendChild($DOM->createElement('s:stacktrace',$e->getTraceAsString()));
 
             }
-            $error->appendChild($DOM->createElement('s:sabredav-version',Sabre_DAV_Version::VERSION));
+            $error->appendChild($DOM->createElement('s:sabredav-version',Sabre_DAV_Version::VERSION . ' (PHP51)'));
 
             if($e instanceof Sabre_DAV_Exception) {
 
