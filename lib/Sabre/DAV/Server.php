@@ -96,6 +96,7 @@ class Sabre_DAV_Server {
      * @var array
      */
     public $propertyMap = array(
+        '{DAV:}resourcetype' => 'Sabre_DAV_Property_ResourceType',
     );
 
     public $protectedProperties = array(
@@ -282,7 +283,7 @@ class Sabre_DAV_Server {
         $pathInfo = $this->httpRequest->getRawServerValue('PATH_INFO');
         $uri = $this->httpRequest->getRawServerValue('REQUEST_URI');
 
-        // If PATH_INFO is not found, we just return /
+        // If PATH_INFO is found, we can assume it's accurate.
         if (!empty($pathInfo)) {
 
             // We need to make sure we ignore the QUERY_STRING part
@@ -305,11 +306,6 @@ class Sabre_DAV_Server {
             throw new Sabre_DAV_Exception('The REQUEST_URI ('. $uri . ') did not end with the contents of PATH_INFO (' . $pathInfo . '). This server might be misconfigured.'); 
 
         } 
-
-        // If the url ended with .php, we're going to assume that that's the server root
-        if (strpos($uri,'.php')===strlen($uri)-4) {
-            return $uri . '/';
-        }
 
         // The last fallback is that we're just going to assume the server root. 
         return '/';
@@ -851,15 +847,8 @@ class Sabre_DAV_Server {
             if (!isset($properties['{DAV:}resourcetype'])) 
                 throw new Sabre_DAV_Exception_BadRequest('The mkcol request must include a {DAV:}resourcetype property');
 
+            $resourceType = $properties['{DAV:}resourcetype']->getValue();
             unset($properties['{DAV:}resourcetype']);
-
-            $resourceType = array();
-            // Need to parse out all the resourcetypes
-            $rtNode = $dom->firstChild->getElementsByTagNameNS('urn:DAV','resourcetype');
-            $rtNode = $rtNode->item(0);
-            foreach($rtNode->childNodes as $childNode) {;
-                $resourceType[] = Sabre_DAV_XMLUtil::toClarkNotation($childNode);
-            }
 
         } else {
 
@@ -1303,7 +1292,10 @@ class Sabre_DAV_Server {
                 $removeRT = true;
             }
 
-            $this->broadcastEvent('beforeGetProperties',array($myPath, $node, &$currentPropertyNames, &$newProperties));
+            $result = $this->broadcastEvent('beforeGetProperties',array($myPath, $node, &$currentPropertyNames, &$newProperties));
+            // If this method explicitly returned false, we must ignore this 
+            // node as it is inacessible.
+            if ($result===false) continue;
 
             if (count($currentPropertyNames) > 0) {
 

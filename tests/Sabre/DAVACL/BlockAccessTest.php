@@ -3,6 +3,7 @@
 class Sabre_DAVACL_BlockAccessTest extends PHPUnit_Framework_TestCase {
 
     protected $server;
+    protected $plugin;
 
     function setUp() {
 
@@ -11,9 +12,9 @@ class Sabre_DAVACL_BlockAccessTest extends PHPUnit_Framework_TestCase {
         );
 
         $this->server = new Sabre_DAV_Server($nodes);
-        $aclPlugin = new Sabre_DAVACL_Plugin();
-        $aclPlugin->allowAccessToNodesWithoutACL = false;
-        $this->server->addPlugin($aclPlugin);
+        $this->plugin = new Sabre_DAVACL_Plugin();
+        $this->plugin->allowAccessToNodesWithoutACL = false;
+        $this->server->addPlugin($this->plugin);
 
     }
 
@@ -90,6 +91,15 @@ class Sabre_DAVACL_BlockAccessTest extends PHPUnit_Framework_TestCase {
     /**
      * @expectedException Sabre_DAVACL_Exception_NeedPrivileges
      */
+    function testACL() {
+
+        $this->server->broadcastEvent('beforeMethod',array('ACL','testdir'));
+
+    }
+
+    /**
+     * @expectedException Sabre_DAVACL_Exception_NeedPrivileges
+     */
     function testLOCK() {
 
         $this->server->broadcastEvent('beforeMethod',array('LOCK','testdir'));
@@ -114,24 +124,26 @@ class Sabre_DAVACL_BlockAccessTest extends PHPUnit_Framework_TestCase {
 
     }
 
-    function testAfterGetProperties() {
+    function testBeforeGetProperties() {
 
-        $properties = array(
-            'href' => 'foo',
-            '200' => array(
-                '{DAV:}displayname' => 'foo',
-                '{DAV:}getcontentlength' => 500,
-            ),
-            '404' => array(
-                '{DAV:}bar' => null,
-            ),
-            '403' => array(
-                '{DAV:}owner' => null,
-            ),
+        $requestedProperties = array(
+            '{DAV:}displayname', 
+            '{DAV:}getcontentlength',
+            '{DAV:}bar',
+            '{DAV:}owner', 
         );
+        $returnedProperties = array();
+
+        $arguments = array(
+            'testdir',
+            new Sabre_DAV_SimpleDirectory('testdir'),
+            &$requestedProperties,
+            &$returnedProperties
+        );
+        $r = $this->server->broadcastEvent('beforeGetProperties',$arguments);
+        $this->assertTrue($r);
 
         $expected = array(
-            'href' => 'foo',
             '403' => array(
                 '{DAV:}displayname' => null,
                 '{DAV:}getcontentlength' => null,
@@ -140,11 +152,31 @@ class Sabre_DAVACL_BlockAccessTest extends PHPUnit_Framework_TestCase {
             ),
         );
 
-        $r = $this->server->broadcastEvent('afterGetProperties',array('testdir',&$properties));
-        $this->assertTrue($r);
-
-        $this->assertEquals($expected, $properties);
+        $this->assertEquals($expected, $returnedProperties);
+        $this->assertEquals(array(), $requestedProperties);
 
     }
 
+    function testBeforeGetPropertiesNoListing() {
+
+        $this->plugin->hideNodesFromListings = true;
+
+        $requestedProperties = array(
+            '{DAV:}displayname', 
+            '{DAV:}getcontentlength',
+            '{DAV:}bar',
+            '{DAV:}owner', 
+        );
+        $returnedProperties = array();
+
+        $arguments = array(
+            'testdir',
+            new Sabre_DAV_SimpleDirectory('testdir'),
+            &$requestedProperties,
+            &$returnedProperties
+        );
+        $r = $this->server->broadcastEvent('beforeGetProperties',$arguments);
+        $this->assertFalse($r);
+
+    }
 }
