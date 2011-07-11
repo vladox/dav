@@ -64,15 +64,15 @@ class Sabre_CalDAV_CalendarQueryFilterTest extends PHPUnit_Framework_TestCase {
             '/c:iCalendar/c:vcalendar' => array(),
             '/c:iCalendar/c:vcalendar/c:vevent' => array(
                 'time-range' => array(
-                    'start' => new DateTime('2006-01-04 00:00:00',new DateTimeZone('UTC')),
-                    'end' =>   new DateTime('2006-01-05 00:00:00',new DateTimeZone('UTC')),
+                    'start' => new Sabre_DateTime('2006-01-04 00:00:00',new Sabre_DateTimeZone('UTC')),
+                    'end' =>   new Sabre_DateTime('2006-01-05 00:00:00',new Sabre_DateTimeZone('UTC')),
                 ),
             ),
         );
         
 
         $this->assertFalse($calendarPlugin->validateFilters(Sabre_CalDAV_TestUtil::getTestCalendarData(),$filters));
-        $filters['/c:iCalendar/c:vcalendar/c:vevent']['time-range']['end'] = new DateTime('2011-01-01 00:00:00', new DateTimeZone('UTC'));
+        $filters['/c:iCalendar/c:vcalendar/c:vevent']['time-range']['end'] = new Sabre_DateTime('2011-01-01 00:00:00', new Sabre_DateTimeZone('UTC'));
 
         foreach(range(1,7) as $testCase) {
             $this->assertTrue($calendarPlugin->validateFilters(Sabre_CalDAV_TestUtil::getTestCalendarData($testCase),$filters));
@@ -92,8 +92,8 @@ class Sabre_CalDAV_CalendarQueryFilterTest extends PHPUnit_Framework_TestCase {
             '/c:iCalendar/c:vcalendar' => array(),
             '/c:iCalendar/c:vcalendar/c:vtodo' => array(
                 'time-range' => array(
-                    'start' => new DateTime('2006-01-01 00:00:00',new DateTimeZone('UTC')),
-                    'end' => new DateTime('2007-01-01 00:00:00', new DateTimeZone('UTC')),
+                    'start' => new Sabre_DateTime('2006-01-01 00:00:00',new Sabre_DateTimeZone('UTC')),
+                    'end' => new Sabre_DateTime('2007-01-01 00:00:00', new Sabre_DateTimeZone('UTC')),
                 ),
             ),
         );
@@ -138,8 +138,8 @@ class Sabre_CalDAV_CalendarQueryFilterTest extends PHPUnit_Framework_TestCase {
             '/c:iCalendar/c:vcalendar' => array(),
             '/c:iCalendar/c:vcalendar/c:vevent' => array(
                 'time-range' => array(
-                    'start' => new DateTime('2006-01-04 00:00:00', new DateTimeZone('UTC')),
-                    'end'   => new DateTime('2011-01-05 00:00:00', new DateTimeZone('UTC')),
+                    'start' => new Sabre_DateTime('2006-01-04 00:00:00', new Sabre_DateTimeZone('UTC')),
+                    'end'   => new Sabre_DateTime('2011-01-05 00:00:00', new Sabre_DateTimeZone('UTC')),
                 ),
             ),
         );

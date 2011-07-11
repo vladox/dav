@@ -165,8 +165,8 @@ class Sabre_HTTP_AWSAuth extends Sabre_HTTP_AbstractAuth {
             return false;
         }
 
-        $min = new DateTime('-15 minutes');
-        $max = new DateTime('+15 minutes');
+        $min = new Sabre_DateTime('-15 minutes');
+        $max = new Sabre_DateTime('+15 minutes');
 
         // We allow 15 minutes around the current date/time
         if ($date > $max || $date < $min) {

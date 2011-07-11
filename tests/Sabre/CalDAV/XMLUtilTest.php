@@ -71,8 +71,8 @@ XML;
             '/c:iCalendar/c:vcalendar' => array(),
             '/c:iCalendar/c:vcalendar/c:vevent' => array(
                 'time-range' => array(
-                    'start' => new DateTime('2006-01-04 00:00:00',new DateTimeZone('UTC')),
-                    'end' =>   new DateTime('2006-01-05 00:00:00',new DateTimeZone('UTC')),
+                    'start' => new Sabre_DateTime('2006-01-04 00:00:00',new Sabre_DateTimeZone('UTC')),
+                    'end' =>   new Sabre_DateTime('2006-01-05 00:00:00',new Sabre_DateTimeZone('UTC')),
                 ),
             ),
         );
@@ -107,8 +107,8 @@ XML;
             '/c:iCalendar/c:vcalendar' => array(),
             '/c:iCalendar/c:vcalendar/c:vtodo' => array(
                 'time-range' => array(
-                    'start' => new DateTime('2006-01-01 00:00:00',new DateTimeZone('UTC')),
-                    'end' => new DateTime('2007-01-01 00:00:00', new DateTimeZone('UTC')),
+                    'start' => new Sabre_DateTime('2006-01-01 00:00:00',new Sabre_DateTimeZone('UTC')),
+                    'end' => new Sabre_DateTime('2007-01-01 00:00:00', new Sabre_DateTimeZone('UTC')),
                 ),
             ),
         );
@@ -251,7 +251,7 @@ XML;
 
         $dateTime = Sabre_CalDAV_XMLUtil::parseICalendarDateTime('20100316T141405');
 
-        $compare = new DateTime('2010-03-16 14:14:05',new DateTimeZone('UTC'));
+        $compare = new Sabre_DateTime('2010-03-16 14:14:05',new Sabre_DateTimeZone('UTC'));
 
         $this->assertEquals($compare, $dateTime);
 
@@ -274,7 +274,7 @@ XML;
 
         $dateTime = Sabre_CalDAV_XMLUtil::parseICalendarDateTime('20100316T141405Z');
 
-        $compare = new DateTime('2010-03-16 14:14:05',new DateTimeZone('UTC'));
+        $compare = new Sabre_DateTime('2010-03-16 14:14:05',new Sabre_DateTimeZone('UTC'));
         $this->assertEquals($compare, $dateTime);
 
     }
@@ -286,7 +286,7 @@ XML;
 
         $dateTime = Sabre_CalDAV_XMLUtil::parseICalendarDateTime('20101211T160000Z');
 
-        $compare = new DateTime('2010-12-11 16:00:00',new DateTimeZone('UTC'));
+        $compare = new Sabre_DateTime('2010-12-11 16:00:00',new Sabre_DateTimeZone('UTC'));
         $this->assertEquals($compare, $dateTime);
 
     }
@@ -296,9 +296,9 @@ XML;
      */
     function testParseICalendarDateTimeCustomTimeZone() {
 
-        $dateTime = Sabre_CalDAV_XMLUtil::parseICalendarDateTime('20100316T141405', new DateTimeZone('Europe/Amsterdam'));
+        $dateTime = Sabre_CalDAV_XMLUtil::parseICalendarDateTime('20100316T141405', new Sabre_DateTimeZone('Europe/Amsterdam'));
 
-        $compare = new DateTime('2010-03-16 13:14:05',new DateTimeZone('UTC'));
+        $compare = new Sabre_DateTime('2010-03-16 13:14:05',new Sabre_DateTimeZone('UTC'));
         $this->assertEquals($compare, $dateTime);
 
     }
@@ -307,7 +307,7 @@ XML;
 
         $dateTime = Sabre_CalDAV_XMLUtil::parseICalendarDate('20100316');
 
-        $compare = new DateTime('2010-03-16 00:00:00',new DateTimeZone('UTC'));
+        $compare = new Sabre_DateTime('2010-03-16 00:00:00',new Sabre_DateTimeZone('UTC'));
 
         $this->assertEquals($compare, $dateTime);
 
