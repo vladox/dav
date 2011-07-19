@@ -150,9 +150,8 @@ class Sabre_DAVACL_PluginPropertiesTest extends PHPUnit_Framework_TestCase {
         );
 
 
-        // reloading because php dom sucks 
-        $dom2 = new DOMDocument('1.0', 'utf-8');
-        $dom2->loadXML($dom->saveXML());
+        // reloading because php dom sucks
+        $dom2 = Sabre_DAV_XMLUtil::loadDOMDocument($dom->saveXML()); 
 
         $dxpath = new DOMXPath($dom2);
         $dxpath->registerNamespace('d','DAV:');
