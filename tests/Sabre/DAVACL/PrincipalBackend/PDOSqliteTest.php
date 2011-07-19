@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Sabre/DAV/Auth/Backend/AbstractPDOTest.php';
+require_once 'Sabre/DAVACL/PrincipalBackend/AbstractPDOTest.php';
 
 class Sabre_DAVACL_PrincipalBackend_PDOSQLiteTest extends Sabre_DAVACL_PrincipalBackend_AbstractPDOTest {
 

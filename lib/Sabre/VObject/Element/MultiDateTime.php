@@ -46,54 +46,7 @@ class Sabre_VObject_Element_MultiDateTime extends Sabre_VObject_Property {
      */
     public function setDateTimes(array $dt, $dateType = Sabre_VObject_Element_DateTime::LOCALTZ) {
 
-        foreach($dt as $i) 
-            if (!$i instanceof DateTime) 
-                throw new InvalidArgumentException('You must pass an array of DateTime objects');
-
-        $this->offsetUnset('VALUE');
-        $this->offsetUnset('TZID');
-        switch($dateType) {
-
-            case Sabre_VObject_Element_DateTime::LOCAL :
-                $val = array();
-                foreach($dt as $i) {
-                    $val[] = $i->format('Ymd\\THis');
-                }
-                $this->setValue(implode(',',$val));
-                $this->offsetSet('VALUE','DATETIME'); 
-                break;
-            case Sabre_VObject_Element_DateTime::UTC :
-                $val = array();
-                foreach($dt as $i) {
-                    $i->setTimeZone(new DateTimeZone('UTC'));
-                    $val[] = $i->format('Ymd\\THis\\Z');
-                }
-                $this->setValue(implode(',',$val));
-                $this->offsetSet('VALUE','DATETIME');
-                break;
-            case Sabre_VObject_Element_DateTime::LOCALTZ :
-                $val = array();
-                foreach($dt as $i) {
-                    $val[] = $i->format('Ymd\\THis');
-                }
-                $this->setValue(implode(',',$val));
-                $this->offsetSet('VALUE','DATETIME');
-                $this->offsetSet('TZID', $dt[0]->getTimeZone()->getName());
-                break; 
-            case Sabre_VObject_Element_DateTime::DATE :
-                $val = array();
-                foreach($dt as $i) {
-                    $val[] = $i->format('Ymd');
-                }
-                $this->setValue(implode(',',$val));
-                $this->offsetSet('VALUE','DATE');
-                break;
-            default :
-                throw new InvalidArgumentException('You must pass a valid dateType constant');
-
-        }
-        $this->dateTimes = $dt;
-        $this->dateType = $dateType;
+        throw new Sabre_DAV_Exception_NotImplemented('This feature is not supported in the PHP 5.1 version of this package');
 
     }
 
@@ -106,27 +59,7 @@ class Sabre_VObject_Element_MultiDateTime extends Sabre_VObject_Property {
      */
     public function getDateTimes() {
 
-        if ($this->dateTimes)
-            return $this->dateTimes;
-
-        $dts = array();
-    
-        if (!$this->value) {
-            $this->dateTimes = null;
-            $this->dateType = null;
-            return null;
-        }
-
-        foreach(explode(',',$this->value) as $val) {
-            list(
-                $type,
-                $dt
-            ) = Sabre_VObject_Element_DateTime::parseData($val, $this->offsetGet('TZID'));
-            $dts[] = $dt;
-            $this->dateType = $type;
-        }
-        $this->dateTimes = $dts;
-        return $this->dateTimes;
+        throw new Sabre_DAV_Exception_NotImplemented('This feature is not supported in the PHP 5.1 version of this package');
 
     }
 
@@ -140,26 +73,7 @@ class Sabre_VObject_Element_MultiDateTime extends Sabre_VObject_Property {
      */
     public function getDateType() {
 
-        if ($this->dateType)
-            return $this->dateType;
-    
-        if (!$this->value) {
-            $this->dateTimes = null;
-            $this->dateType = null;
-            return null;
-        }
-
-        $dts = array();
-        foreach(explode(',',$this->value) as $val) {
-            list(
-                $type,
-                $dt
-            ) = Sabre_VObject_Element_DateTime::parseData($val, $this->offsetGet('TZID'));
-            $dts[] = $dt;
-            $this->dateType = $type; 
-        }
-        $this->dateTimes = $dts;
-        return $this->dateType;
+        throw new Sabre_DAV_Exception_NotImplemented('This feature is not supported in the PHP 5.1 version of this package');
 
     }
 
