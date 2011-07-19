@@ -5,6 +5,8 @@
  *
  * This client wraps around Curl to provide a convenient API to a WebDAV 
  * server.
+ *
+ * NOTE: This class is experimental, it's api will likely change in the future.
  * 
  * @package Sabre
  * @subpackage DAVClient
@@ -12,14 +14,14 @@
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Sabre_DAVClient_Client {
+class Sabre_DAV_Client {
+
+    public $propertyMap = array();
 
     protected $baseUri;
     protected $userName;
     protected $password;
     protected $proxy;
-
-    protected $propertyMap = array();
 
     /**
      * Constructor
@@ -53,7 +55,7 @@ class Sabre_DAVClient_Client {
             }
         }
 
-        $this->propertyMap['{DAV:}resourceType'] = 'Sabre_DAV_Property_ResourceType';
+        $this->propertyMap['{DAV:}resourcetype'] = 'Sabre_DAV_Property_ResourceType';
 
     }
 
@@ -109,7 +111,13 @@ class Sabre_DAVClient_Client {
 
         $result = $this->parseMultiStatus($response['body']);
 
-        // Pulling out only the found properties
+        // If depth was 0, we only return the top item
+        if ($depth===0) {
+            reset($result);
+            $result = current($result);
+            return $result[200];
+        }
+
         $newResult = array();
         foreach($result as $href => $statusList) {
 
@@ -122,10 +130,106 @@ class Sabre_DAVClient_Client {
     }
 
     /**
+     * Updates a list of properties on the server
+     *
+     * The list of properties must have clark-notation properties for the keys, 
+     * and the actual (string) value for the value. If the value is null, an 
+     * attempt is made to delete the property. 
+     *
+     * @todo Must be building the request using the DOM, and does not yet 
+     *       support complex properties. 
+     * @param string $url 
+     * @param array $properties 
+     * @return void
+     */
+    public function propPatch($url, array $properties) {
+
+        $body = '<?xml version="1.0"?>' . "\n";
+        $body.= '<d:propertyupdate xmlns:d="DAV:">' . "\n";
+
+        foreach($properties as $propName => $propValue) {
+
+            list(
+                $namespace,
+                $elementName
+            ) = Sabre_DAV_XMLUtil::parseClarkNotation($propName);
+
+            if ($propValue === null) {
+
+                $body.="<d:remove><d:prop>\n";
+
+                if ($namespace === 'DAV:') {
+                    $body.='    <d:' . $elementName . ' />' . "\n";
+                } else {
+                    $body.="    <x:" . $elementName . " xmlns:x=\"" . $namespace . "\"/>\n";
+                }
+
+                $body.="</d:prop></d:remove>\n";
+
+            } else {
+
+                $body.="<d:set><d:prop>\n";
+                if ($namespace === 'DAV:') {
+                    $body.='    <d:' . $elementName . '>';
+                } else {
+                    $body.="    <x:" . $elementName . " xmlns:x=\"" . $namespace . "\">";
+                }
+                // Shitty.. i know
+                $body.=htmlspecialchars($propValue, ENT_NOQUOTES, 'UTF-8'); 
+                if ($namespace === 'DAV:') {
+                    $body.='</d:' . $elementName . '>' . "\n";
+                } else {
+                    $body.="</x:" . $elementName . ">\n";
+                }
+                $body.="</d:prop></d:set>\n";
+
+            }
+
+        }
+
+        $body.= '</d:propertyupdate>';
+
+        $response = $this->request('PROPPATCH', $url, $body, array(
+            'Content-Type' => 'application/xml'
+        ));
+
+    }
+
+    /**
+     * Performs an HTTP options request
+     *
+     * This method returns all the features from the 'DAV:' header as an array. 
+     * If there was no DAV header, or no contents this method will return an 
+     * empty array. 
+     * 
+     * @return array 
+     */
+    public function options() {
+
+        $result = $this->request('OPTIONS');
+        if (!isset($result['headers']['dav'])) {
+            return array();
+        }
+
+        $features = explode(',', $result['headers']['dav']);
+        foreach($features as &$v) {
+            $v = trim($v);
+        }
+        return $features;
+
+    }
+
+    /**
      * Performs an actual HTTP request, and returns the result.
      *
      * If the specified url is relative, it will be expanded based on the base 
      * url.
+     *
+     * The returned array contains 3 keys:
+     *   * body - the response body
+     *   * httpCode - a HTTP code (200, 404, etc)
+     *   * headers - a list of response http headers. The header names have 
+     *     been lowercased.
      *
      * @param string $method 
      * @param string $url 
@@ -133,14 +237,16 @@ class Sabre_DAVClient_Client {
      * @param array $headers 
      * @return array 
      */
-    protected function request($method, $url, $body = null, $headers = array()) {
+    public function request($method, $url = '', $body = null, $headers = array()) {
 
         $url = $this->getAbsoluteUrl($url);
 
         $curlSettings = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => $method,
-            CURLOPT_POSTFIELDS => $body
+            CURLOPT_POSTFIELDS => $body,
+            // Return headers as part of the response
+            CURLOPT_HEADER => true
         );
 
         // Adding HTTP headers
@@ -156,31 +262,79 @@ class Sabre_DAVClient_Client {
             $curlSettings[CURLOPT_PROXY] = $this->proxy;
         }
 
-        if ($this->username) {
+        if ($this->userName) {
             $curlSettings[CURLOPT_HTTPAUTH] = CURLAUTH_BASIC | CURLAUTH_DIGEST;
-            $curlSettings[CURLOPT_USERPWD] = $this->username . ':' . $this->password;
+            $curlSettings[CURLOPT_USERPWD] = $this->userName . ':' . $this->password;
         }
 
-        $curl = curl_init($url);
-        curl_setopt_array($curl, $curlSettings);
+        list(
+            $response,
+            $curlInfo,
+            $curlErrNo,
+            $curlError
+        ) = $this->curlRequest($url, $curlSettings);
 
-        $responseBody = curl_exec($curl);
+        $headerBlob = substr($response, 0, $curlInfo['header_size']);
+        $response = substr($response, $curlInfo['header_size']);
 
-        $curlInfo = curl_getinfo($curl);
+        // In the case of 100 Continue, or redirects we'll have multiple lists 
+        // of headers for each separate HTTP response. We can easily split this 
+        // because they are separated by \r\n\r\n
+        $headerBlob = explode("\r\n\r\n", trim($headerBlob, "\r\n"));
+        
+        // We only care about the last set of headers
+        $headerBlob = $headerBlob[count($headerBlob)-1];
+
+        // Splitting headers
+        $headerBlob = explode("\r\n", $headerBlob);
+        
+        $headers = array();
+        foreach($headerBlob as $header) {
+            $parts = explode(':', $header, 2);
+            if (count($parts)==2) {
+                $headers[strtolower(trim($parts[0]))] = trim($parts[1]);
+            }
+        }
+
         $response = array(
-            'body' => $responseBody,
-            'statusCode' => $curlInfo['http_code']
+            'body' => $response,
+            'statusCode' => $curlInfo['http_code'],
+            'headers' => $headers
         );
 
-        if (curl_errno($curl)) {
-            throw new Sabre_DAV_Exception('[CURL] Error while making request: ' . curl_error($curl) . ' (error code: ' . curl_errno($curl) . ')');
+        if ($curlErrNo) {
+            throw new Sabre_DAV_Exception('[CURL] Error while making request: ' . $curlError . ' (error code: ' . $curlErrNo . ')');
         } 
 
-        if ($response['statuscode']>=400) {
+        if ($response['statusCode']>=400) {
             throw new Sabre_DAV_Exception('HTTP error response. (errorcode ' . $response['statusCode'] . ')');
         }
 
         return $response;
+
+    }
+
+    /**
+     * Wrapper for all curl functions.
+     *
+     * The only reason this was split out in a separate method, is so it 
+     * becomes easier to unittest. 
+     *
+     * @param string $url
+     * @param array $settings 
+     * @return  
+     */
+    protected function curlRequest($url, $settings) {
+
+        $curl = curl_init($url);
+        curl_setopt_array($curl, $settings);
+
+        return array(
+            curl_exec($curl),
+            curl_getinfo($curl),
+            curl_errno($curl),
+            curl_error($curl)
+        );
 
     }
 
@@ -201,24 +355,49 @@ class Sabre_DAVClient_Client {
         // If the url starts with a slash, we must calculate the url based off 
         // the root of the base url.
         if (strpos($url,'/') === 0) {
-            $parts = parse_url($this->baseUrl);
+            $parts = parse_url($this->baseUri);
             return $parts['scheme'] . '://' . $parts['host'] . (isset($parts['port'])?':' . $parts['port']:'') . $url;
         }
 
         // Otherwise...
-        return $this->baseUrl . $url;
+        return $this->baseUri . $url;
 
     }
 
     /**
      * Parses a WebDAV multistatus response body
      * 
-     * @param string $body 
+     * This method returns an array with the following structure
+     *
+     * array(
+     *   'url/to/resource' => array(
+     *     '200' => array(
+     *        '{DAV:}property1' => 'value1',
+     *        '{DAV:}property2' => 'value2',
+     *     ),
+     *     '404' => array(
+     *        '{DAV:}property1' => null,
+     *        '{DAV:}property2' => null,
+     *     ),
+     *   )
+     *   'url/to/resource2' => array(
+     *      .. etc ..
+     *   )
+     * )
+     *
+     *
+     * @param string $body xml body
      * @return array 
      */
-    protected function parseMultiStatus($body) {
+    public function parseMultiStatus($body) {
+
+        $body = Sabre_DAV_XMLUtil::convertDAVNamespace($body);
 
         $responseXML = simplexml_load_string($body, null, LIBXML_NOBLANKS | LIBXML_NOCDATA);
+        if ($responseXML===false) {
+            throw new InvalidArgumentException('The passed data is not valid XML');
+        }
+         
         $responseXML->registerXPathNamespace('d','DAV:');
 
         $propResult = array();
