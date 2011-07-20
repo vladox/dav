@@ -46,7 +46,7 @@ class Sabre_VObject_PropertyTest extends PHPUnit_Framework_TestCase {
         $property->parameters[] = new Sabre_VObject_Parameter('paramname','paramvalue');
         $property->parameters[] = new Sabre_VObject_Parameter('paramname','paramvalue');
         
-        $this->assertType('Sabre_VObject_ElementList',$property['paramname']);
+        $this->assertType('Sabre_VObject_Parameter',$property['paramname']);
         $this->assertEquals(2,count($property['paramname']));
 
     }

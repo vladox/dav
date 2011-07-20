@@ -123,14 +123,14 @@ class Sabre_VObject_Reader {
         //$result = preg_match('/(?P<name>[A-Z0-9-]+)(?:;(?P<parameters>^(?<!:):))(.*)$/',$line,$matches);
 
 
-        $token = '[A-Z0-9-]+';
+        $token = '[A-Z0-9-\.]+';
         $parameters = "(?:;(?P<parameters>([^:^\"]|\"([^\"]*)\")*))?";
         $regex = "/^(?P<name>$token)$parameters:(?P<value>.*)$/i";
 
         $result = preg_match($regex,$line,$matches);
 
         if (!$result) {
-            throw new Sabre_VObject_ParseException('Invalid VObject, line ' . ($lineNr+1) . ' did not follow icalendar format');
+            throw new Sabre_VObject_ParseException('Invalid VObject, line ' . ($lineNr+1) . ' did not follow the icalendar/vcard format');
         }
 
         $propertyName = strtoupper($matches['name']);
@@ -168,7 +168,7 @@ class Sabre_VObject_Reader {
 
         $paramValue = '(?P<paramValue>[^\"^;]*|"[^"]*")';
 
-        $regex = "/(?<=^|;)(?P<paramName>$token)=$paramValue(?=$|;)/";
+        $regex = "/(?<=^|;)(?P<paramName>$token)=$paramValue(?=$|;)/i";
         preg_match_all($regex, $parameters, $matches,  PREG_SET_ORDER);
 
         $params = array();
