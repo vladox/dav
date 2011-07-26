@@ -19,8 +19,7 @@ class Sabre_DAVACL_Exception_NotRecognizedPrincipalTest extends PHPUnit_Framewor
         );
 
         // Reloading because PHP DOM sucks
-        $dom2 = new DOMDocument('1.0', 'utf-8');
-        $dom2->loadXML($dom->saveXML());
+        $dom2 = Sabre_DAV_XMLUtil::loadDOMDocument($dom->saveXML());
 
         $dxpath = new DOMXPath($dom2);
         $dxpath->registerNamespace('d','DAV:');

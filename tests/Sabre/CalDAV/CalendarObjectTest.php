@@ -35,9 +35,9 @@ class Sabre_CalDAV_CalendarObjectTest extends PHPUnit_Framework_TestCase {
         $children = $this->calendar->getChildren();
         $this->assertTrue($children[0] instanceof Sabre_CalDAV_CalendarObject);
         
-        $this->assertInternalType('string',$children[0]->getName());
-        $this->assertInternalType('string',$children[0]->get());
-        $this->assertInternalType('string',$children[0]->getETag());
+        $this->assertType('string',$children[0]->getName());
+        $this->assertType('string',$children[0]->get());
+        $this->assertType('string',$children[0]->getETag());
         $this->assertEquals('text/calendar', $children[0]->getContentType());
 
     }
@@ -82,9 +82,6 @@ class Sabre_CalDAV_CalendarObjectTest extends PHPUnit_Framework_TestCase {
 
     }
 
-    /**
-     * @depends testSetup
-     */
     function testDelete() {
 
         $children = $this->calendar->getChildren();
@@ -124,7 +121,7 @@ class Sabre_CalDAV_CalendarObjectTest extends PHPUnit_Framework_TestCase {
         $obj = $children[0];
 
         $size = $obj->getSize();
-        $this->assertInternalType('int', $size);
+        $this->assertType('int', $size);
 
     }
 

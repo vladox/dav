@@ -7,9 +7,11 @@
     <!-- Where to write api documentation -->
     <property name="sabredav.apidocspath" value="docs/api" />
 
-    <target name="build" depends="init, test, clean">
+    <target name="build" depends="init, clean">
         <mkdir dir="build" /> 
         
+<<<<<<< local
+=======
         <echo msg="Building Sabre pear package" />
         <mkdir dir="build/Sabre" />
         <copy todir="build/Sabre">
@@ -158,6 +160,7 @@
         </move>
 
 
+>>>>>>> other
         <echo>Creating combined SabreDAV build</echo>
         <mkdir dir="build/SabreDAV" />
         <mkdir dir="build/SabreDAV/lib" />
@@ -189,7 +192,7 @@
             </fileset>
         </copy>
         <mkdir dir="build/SabreDAV/tests/temp" />
-        <zip destfile="build/SabreDAV-${sabredav.version}.zip" basedir="build/SabreDAV" prefix="SabreDAV/" /> 
+        <zip destfile="build/SabreDAV-${sabredav.version}-php51.zip" basedir="build/SabreDAV" prefix="SabreDAV/" /> 
 
     </target>
 
@@ -201,11 +204,11 @@
 
     <target name="release" depends="init,clean,test,build">
         <echo>Creating Mercurial release tag</echo>
-        <exec command="hg tag version-${sabredav.version}" checkreturn="false" passthru="1" />
+        <exec command="hg tag version-${sabredav.version}-php51" checkreturn="false" passthru="1" />
         <echo>Uploading to Google Code</echo>
         <propertyprompt propertyName="googlecode.username" promptText="Enter your googlecode username" useExistingValue="true" />
         <propertyprompt propertyName="googlecode.password" promptText="Enter your googlecode password" useExistingValue="true" />
-        <exec command="bin/googlecode_upload.py -s 'SabreDAV ${sabredav.version}' -p sabredav --labels=${sabredav.ucstability} -u '${googlecode.username}' -w '${googlecode.password}' build/SabreDAV-${sabredav.version}.zip" checkreturn="true" />
+        <exec command="bin/googlecode_upload.py -s 'SabreDAV PHP51 ${sabredav.version}' -p sabredav --labels=${sabredav.ucstability} -u '${googlecode.username}' -w '${googlecode.password}' build/SabreDAV-${sabredav.version}-php51.zip" checkreturn="true" />
     </target>
 
     <target name="test">
@@ -216,27 +219,6 @@
             </fileset>
           </batchtest>
         </phpunit>
-    </target>
-
-    <target name="apidocs" depends="init">
-
-        <echo>Creating api documentation using PHP documentor</echo>
-        <echo>Writing to ${sabredav.apidocspath}</echo>
-        <phpdoc title="SabreDAV API documentation"
-            destdir="${sabredav.apidocspath}"
-            sourcecode="false"
-            output="HTML:frames:phphtmllib">
-
-            <fileset dir="./lib">
-                <include name="**/*.php" />
-            </fileset>
-            <projdocfileset dir=".">
-                <include name="ChangeLog" />
-                <include name="LICENSE" />
-            </projdocfileset>
-
-        </phpdoc>
-
     </target>
 
     <target name="init">
@@ -259,7 +241,7 @@
 
         ]]></adhoc-task>
         <sabredav-version />
-        <echo>SabreDAV version ${sabredav.version}</echo>
+        <echo>SabreDAV version php51-${sabredav.version}</echo>
 
     </target>
 

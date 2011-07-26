@@ -8,7 +8,7 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
 
         $result = Sabre_VObject_Reader::read($data);
 
-        $this->assertInstanceOf('Sabre_VObject_Component', $result);
+        $this->assertType('Sabre_VObject_Component', $result);
         $this->assertEquals('VCALENDAR', $result->name);
         $this->assertEquals(0, count($result->children));
 
@@ -20,7 +20,7 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
 
         $result = Sabre_VObject_Reader::read($data);
 
-        $this->assertInstanceOf('Sabre_VObject_Component', $result);
+        $this->assertType('Sabre_VObject_Component', $result);
         $this->assertEquals('VCALENDAR', $result->name);
         $this->assertEquals(0, count($result->children));
 
@@ -32,7 +32,7 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
 
         $result = Sabre_VObject_Reader::read($data);
 
-        $this->assertInstanceOf('Sabre_VObject_Component', $result);
+        $this->assertType('Sabre_VObject_Component', $result);
         $this->assertEquals('VCALENDAR', $result->name);
         $this->assertEquals(0, count($result->children));
 
@@ -44,7 +44,7 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
 
         $result = Sabre_VObject_Reader::read($data);
 
-        $this->assertInstanceOf('Sabre_VObject_Component', $result);
+        $this->assertType('Sabre_VObject_Component', $result);
         $this->assertEquals('VCALENDAR', $result->name);
         $this->assertEquals(0, count($result->children));
 
@@ -66,7 +66,7 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
         $data = "PROPNAME:propValue";
         $result = Sabre_VObject_Reader::read($data);
 
-        $this->assertInstanceOf('Sabre_VObject_Property', $result);
+        $this->assertType('Sabre_VObject_Property', $result);
         $this->assertEquals('PROPNAME', $result->name);
         $this->assertEquals('propValue', $result->value);
 
@@ -77,7 +77,7 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
         $data = "DTSTART:20110529";
         $result = Sabre_VObject_Reader::read($data);
 
-        $this->assertInstanceOf('Sabre_VObject_Element_DateTime', $result);
+        $this->assertType('Sabre_VObject_Element_DateTime', $result);
         $this->assertEquals('DTSTART', $result->name);
         $this->assertEquals('20110529', $result->value);
 
@@ -103,10 +103,10 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
 
         $result = Sabre_VObject_Reader::read(implode("\r\n",$data));
 
-        $this->assertInstanceOf('Sabre_VObject_Component', $result);
+        $this->assertType('Sabre_VObject_Component', $result);
         $this->assertEquals('VCALENDAR', $result->name);
         $this->assertEquals(1, count($result->children));
-        $this->assertInstanceOf('Sabre_VObject_Property', $result->children[0]);
+        $this->assertType('Sabre_VObject_Property', $result->children[0]);
         $this->assertEquals('PROPNAME', $result->children[0]->name);
         $this->assertEquals('propValue', $result->children[0]->value);
 
@@ -125,13 +125,13 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
 
         $result = Sabre_VObject_Reader::read(implode("\r\n",$data));
 
-        $this->assertInstanceOf('Sabre_VObject_Component', $result);
+        $this->assertType('Sabre_VObject_Component', $result);
         $this->assertEquals('VCALENDAR', $result->name);
         $this->assertEquals(1, count($result->children));
-        $this->assertInstanceOf('Sabre_VObject_Component', $result->children[0]);
+        $this->assertType('Sabre_VObject_Component', $result->children[0]);
         $this->assertEquals('VTIMEZONE', $result->children[0]->name);
         $this->assertEquals(1, count($result->children[0]->children));
-        $this->assertInstanceOf('Sabre_VObject_Component', $result->children[0]->children[0]);
+        $this->assertType('Sabre_VObject_Component', $result->children[0]->children[0]);
         $this->assertEquals('DAYLIGHT', $result->children[0]->children[0]->name);
 
 
@@ -142,7 +142,7 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
         $data = "PROPNAME;PARAMNAME=paramvalue:propValue";
         $result = Sabre_VObject_Reader::read($data);
 
-        $this->assertInstanceOf('Sabre_VObject_Property', $result);
+        $this->assertType('Sabre_VObject_Property', $result);
         $this->assertEquals('PROPNAME', $result->name);
         $this->assertEquals('propValue', $result->value);
         $this->assertEquals(1, count($result->parameters));
@@ -170,7 +170,7 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
         $data = "PROPNAME;PARAMNAME=paramvalue:propValue:anotherrandomstring";
         $result = Sabre_VObject_Reader::read($data);
 
-        $this->assertInstanceOf('Sabre_VObject_Property', $result);
+        $this->assertType('Sabre_VObject_Property', $result);
         $this->assertEquals('PROPNAME', $result->name);
         $this->assertEquals('propValue:anotherrandomstring', $result->value);
         $this->assertEquals(1, count($result->parameters));
@@ -184,7 +184,7 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
         $data = "PROPNAME;PARAMNAME=paramvalue;PARAMNAME2=paramvalue2:propValue";
         $result = Sabre_VObject_Reader::read($data);
 
-        $this->assertInstanceOf('Sabre_VObject_Property', $result);
+        $this->assertType('Sabre_VObject_Property', $result);
         $this->assertEquals('PROPNAME', $result->name);
         $this->assertEquals('propValue', $result->value);
         $this->assertEquals(2, count($result->parameters));
@@ -200,7 +200,7 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
         $data = "PROPNAME;PARAMNAME=\"paramvalue\":propValue";
         $result = Sabre_VObject_Reader::read($data);
 
-        $this->assertInstanceOf('Sabre_VObject_Property', $result);
+        $this->assertType('Sabre_VObject_Property', $result);
         $this->assertEquals('PROPNAME', $result->name);
         $this->assertEquals('propValue', $result->value);
         $this->assertEquals(1, count($result->parameters));
@@ -214,7 +214,7 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
         $data = "PROPNAME;PARAMNAME=\"param:value\":propValue";
         $result = Sabre_VObject_Reader::read($data);
 
-        $this->assertInstanceOf('Sabre_VObject_Property', $result);
+        $this->assertType('Sabre_VObject_Property', $result);
         $this->assertEquals('PROPNAME', $result->name);
         $this->assertEquals('propValue', $result->value);
         $this->assertEquals(1, count($result->parameters));
