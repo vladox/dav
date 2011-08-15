@@ -79,8 +79,8 @@ class Sabre_DAVACL_ExpandPropertiesTest extends PHPUnit_Framework_TestCase {
             '/d:multistatus/d:response/d:propstat/d:prop/s:href/d:href' => 1,
         );
 
-        $xml = simplexml_load_string($server->httpResponse->body);
-        $xml->registerXPathNamespace('d','DAV:');
+        $xml = simplexml_load_string(Sabre_DAV_XMLUtil::convertDAVNamespace($server->httpResponse->body));
+        $xml->registerXPathNamespace('d','urn:DAV');
         $xml->registerXPathNamespace('s','http://sabredav.org/ns');
         foreach($check as $v1=>$v2) {
 
@@ -143,8 +143,8 @@ class Sabre_DAVACL_ExpandPropertiesTest extends PHPUnit_Framework_TestCase {
             '/d:multistatus/d:response/d:propstat/d:prop/s:href/d:response/d:propstat/d:prop/d:displayname' => 1,
         );
 
-        $xml = simplexml_load_string($server->httpResponse->body);
-        $xml->registerXPathNamespace('d','DAV:');
+        $xml = simplexml_load_string(Sabre_DAV_XMLUtil::convertDAVNamespace($server->httpResponse->body));
+        $xml->registerXPathNamespace('d','urn:DAV');
         $xml->registerXPathNamespace('s','http://sabredav.org/ns');
         foreach($check as $v1=>$v2) {
 
@@ -207,8 +207,8 @@ class Sabre_DAVACL_ExpandPropertiesTest extends PHPUnit_Framework_TestCase {
             '/d:multistatus/d:response/d:propstat/d:prop/s:hreflist/d:response/d:propstat/d:prop/d:displayname' => 2,
         );
 
-        $xml = simplexml_load_string($server->httpResponse->body);
-        $xml->registerXPathNamespace('d','DAV:');
+        $xml = simplexml_load_string(Sabre_DAV_XMLUtil::convertDAVNamespace($server->httpResponse->body));
+        $xml->registerXPathNamespace('d','urn:DAV');
         $xml->registerXPathNamespace('s','http://sabredav.org/ns');
         foreach($check as $v1=>$v2) {
 
@@ -280,8 +280,8 @@ class Sabre_DAVACL_ExpandPropertiesTest extends PHPUnit_Framework_TestCase {
             '/d:multistatus/d:response/d:propstat/d:prop/s:hreflist/d:response/d:propstat/d:prop/s:href/d:response/d:propstat/d:prop/d:displayname' => 1,
         );
 
-        $xml = simplexml_load_string($server->httpResponse->body);
-        $xml->registerXPathNamespace('d','DAV:');
+        $xml = simplexml_load_string(Sabre_DAV_XMLUtil::convertDAVNamespace($server->httpResponse->body));
+        $xml->registerXPathNamespace('d','urn:DAV');
         $xml->registerXPathNamespace('s','http://sabredav.org/ns');
         foreach($check as $v1=>$v2) {
 

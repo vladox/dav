@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Sabre/TestUtil.php';
+require_once 'Sabre/DAVACL/PrincipalBackend/AbstractPDOTest.php';
 
 class Sabre_DAVACL_PrincipalBackend_PDOMySQLTest extends Sabre_DAVACL_PrincipalBackend_AbstractPDOTest {
 

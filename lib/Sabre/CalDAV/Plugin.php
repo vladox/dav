@@ -540,7 +540,7 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
 
         // Determining the timezone
         if ($tzid = (string)$xdtstart[0]['tzid']) {
-            $tz = new DateTimeZone($tzid);
+            $tz = new Sabre_DateTimeZone($tzid);
         } else {
             $tz = null;
         }
@@ -558,7 +558,7 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
         if (count($xdtend)) {
             // Determining the timezone
             if ($tzid = (string)$xdtend[0]['tzid']) {
-                $tz = new DateTimeZone($tzid);
+                $tz = new Sabre_DateTimeZone($tzid);
             } else {
                 $tz = null;
             }
@@ -638,7 +638,7 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
 
             // Determining the timezone
             if ($tzid = (string)$xdt[0]['tzid']) {
-                $tz = new DateTimeZone($tzid);
+                $tz = new Sabre_DateTimeZone($tzid);
             } else {
                 $tz = null;
             }
@@ -687,7 +687,7 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
             }
             // Determining the timezone
             if ($tzid = (string)$xdt[0]['tzid']) {
-                $tz = new DateTimeZone($tzid);
+                $tz = new Sabre_DateTimeZone($tzid);
             } else {
                 $tz = null;
             }

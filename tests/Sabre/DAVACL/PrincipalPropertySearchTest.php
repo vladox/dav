@@ -150,8 +150,8 @@ class Sabre_DAVACL_PrincipalPropertySearchTest extends PHPUnit_Framework_TestCas
             '/d:multistatus/d:response/d:propstat/d:status' => 2,
         );
 
-        $xml = simplexml_load_string($server->httpResponse->body);
-        $xml->registerXPathNamespace('d','DAV:');
+        $xml = simplexml_load_string(Sabre_DAV_XMLUtil::convertDAVNamespace($server->httpResponse->body));
+        $xml->registerXPathNamespace('d','urn:DAV');
         foreach($check as $v1=>$v2) {
 
             $xpath = is_int($v1)?$v2:$v1;

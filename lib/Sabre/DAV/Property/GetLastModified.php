@@ -27,21 +27,21 @@ class Sabre_DAV_Property_GetLastModified extends Sabre_DAV_Property {
     /**
      * __construct 
      * 
-     * @param int|DateTime $time 
+     * @param int|Sabre_DateTime $time 
      * @return void
      */
     public function __construct($time) {
 
-        if ($time instanceof DateTime) {
+        if ($time instanceof Sabre_DateTime) {
             $this->time = $time;
         } elseif (is_int($time) || ctype_digit($time)) {
-            $this->time = new DateTime('@' . $time);
+            $this->time = new Sabre_DateTime('@' . $time);
         } else {
-            $this->time = new DateTime($time);
+            $this->time = new Sabre_DateTime($time);
         }
 
         // Setting timezone to UTC
-        $this->time->setTimezone(new DateTimeZone('UTC'));
+        $this->time->setTimezone(new Sabre_DateTimeZone('UTC'));
 
     }
 
@@ -56,14 +56,14 @@ class Sabre_DAV_Property_GetLastModified extends Sabre_DAV_Property {
         $doc = $prop->ownerDocument;
         $prop->setAttribute('xmlns:b','urn:uuid:c2f41010-65b3-11d1-a29f-00aa00c14882/');
         $prop->setAttribute('b:dt','dateTime.rfc1123');
-        $prop->nodeValue = $this->time->format(DateTime::RFC1123);
+        $prop->nodeValue = $this->time->format(Sabre_DateTime::RFC1123);
 
     }
 
     /**
      * getTime 
      * 
-     * @return DateTime 
+     * @return Sabre_DateTime 
      */
     public function getTime() {
 

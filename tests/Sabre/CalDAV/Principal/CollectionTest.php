@@ -11,7 +11,7 @@ class Sabre_CalDAV_Principal_CollectionTest extends PHPUnit_Framework_TestCase {
         $r = $col->getChildForPrincipal(array(
             'uri' => 'principals/admin',
         ));
-        $this->assertInstanceOf('Sabre_CalDAV_Principal_User', $r);
+        $this->assertType('Sabre_CalDAV_Principal_User', $r);
 
     }
 

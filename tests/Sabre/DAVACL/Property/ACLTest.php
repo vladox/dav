@@ -113,7 +113,7 @@ class Sabre_DAVACL_Property_ACLTest extends PHPUnit_Framework_TestCase {
         $dom = Sabre_DAV_XMLUtil::loadDOMDocument($source);
         $result = Sabre_DAVACL_Property_Acl::unserialize($dom->firstChild);
 
-        $this->assertInstanceOf('Sabre_DAVACL_Property_Acl', $result);
+        $this->assertType('Sabre_DAVACL_Property_Acl', $result);
 
         $expected = array(
             array(

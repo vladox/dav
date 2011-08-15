@@ -62,42 +62,9 @@ class Sabre_VObject_Element_DateTime extends Sabre_VObject_Property {
      * @param int $dateType 
      * @return void
      */
-    public function setDateTime(DateTime $dt, $dateType = self::LOCALTZ) {
+    public function setDateTime($dt, $dateType = self::LOCALTZ) {
 
-        switch($dateType) {
-
-            case self::LOCAL :
-                $this->setValue($dt->format('Ymd\\THis'));
-                $this->offsetUnset('VALUE');
-                $this->offsetUnset('TZID');
-                $this->offsetSet('VALUE','DATETIME'); 
-                break;
-            case self::UTC :
-                $dt->setTimeZone(new DateTimeZone('UTC'));
-                $this->setValue($dt->format('Ymd\\THis\\Z'));
-                $this->offsetUnset('VALUE');
-                $this->offsetUnset('TZID');
-                $this->offsetSet('VALUE','DATETIME');
-                break;
-            case self::LOCALTZ :
-                $this->setValue($dt->format('Ymd\\THis'));
-                $this->offsetUnset('VALUE');
-                $this->offsetUnset('TZID');
-                $this->offsetSet('VALUE','DATETIME');
-                $this->offsetSet('TZID', $dt->getTimeZone()->getName());
-                break; 
-            case self::DATE :
-                $this->setValue($dt->format('Ymd'));
-                $this->offsetUnset('VALUE');
-                $this->offsetUnset('TZID');
-                $this->offsetSet('VALUE','DATE');
-                break;
-            default :
-                throw new InvalidArgumentException('You must pass a valid dateType constant');
-
-        }
-        $this->dateTime = $dt;
-        $this->dateType = $dateType;
+        throw new Sabre_DAV_Exception_NotImplemented('This feature is not supported in the PHP 5.1 version of this package');
 
     }
 
@@ -110,14 +77,7 @@ class Sabre_VObject_Element_DateTime extends Sabre_VObject_Property {
      */
     public function getDateTime() {
 
-        if ($this->dateTime)
-            return $this->dateTime;
-
-        list(
-            $this->dateType,
-            $this->dateTime
-        ) = self::parseData($this->value, $this->offsetGet('TZID'));
-        return $this->dateTime;
+        throw new Sabre_DAV_Exception_NotImplemented('This feature is not supported in the PHP 5.1 version of this package');
 
     }
 
@@ -131,14 +91,7 @@ class Sabre_VObject_Element_DateTime extends Sabre_VObject_Property {
      */
     public function getDateType() {
 
-        if ($this->dateType)
-            return $this->dateType;
-
-        list(
-            $this->dateType,
-            $this->dateTime,
-        ) = self::parseData($this->value, $this->offsetGet('TZID'));
-        return $this->dateType;
+        throw new Sabre_DAV_Exception_NotImplemented('This feature is not supported in the PHP 5.1 version of this package');
 
     }
 
@@ -156,60 +109,8 @@ class Sabre_VObject_Element_DateTime extends Sabre_VObject_Property {
      * @return array 
      */
     static public function parseData($propertyValue, $tzid) {
-        
 
-        if (is_null($propertyValue)) {
-            return array(null, null);
-        }
-
-        $date = '(?P<year>[1-2][0-9]{3})(?P<month>[0-1][0-9])(?P<date>[0-3][0-9])';
-        $time = '(?P<hour>[0-2][0-9])(?P<minute>[0-5][0-9])(?P<second>[0-5][0-9])';
-        $regex = "/^$date(T$time(?P<isutc>Z)?)?$/";
-
-        if (!preg_match($regex, $propertyValue, $matches)) {
-            throw new InvalidArgumentException($propertyValue . ' is not a valid DateTime or Date string');
-        }
-
-        if (!isset($matches['hour'])) {
-            // Date-only
-            return array(
-                self::DATE,
-                new DateTime($matches['year'] . '-' . $matches['month'] . '-' . $matches['date'] . ' 00:00:00'),
-            );
-        }
-
-        $dateStr = 
-            $matches['year'] .'-' . 
-            $matches['month'] . '-' . 
-            $matches['date'] . ' ' .
-            $matches['hour'] . ':' .
-            $matches['minute'] . ':' .
-            $matches['second']; 
-
-        if (isset($matches['isutc'])) {
-            $dt = new DateTime($dateStr,new DateTimeZone('UTC'));
-            $dt->setTimeZone(new DateTimeZone('UTC'));
-            return array(
-                self::UTC,
-                $dt
-            );
-        }
-
-        if (!$tzid) {
-            return array(
-                self::LOCAL,
-                new DateTime($dateStr)
-            );
-        }
-
-        $tz = new DateTimeZone($tzid->value);
-        $dt = new DateTime($dateStr, $tz);
-        $dt->setTimeZone($tz);
-
-        return array(
-            self::LOCALTZ,
-            $dt
-        );
+        throw new Sabre_DAV_Exception_NotImplemented('This feature is not supported in the PHP 5.1 version of this package');
 
     }
 

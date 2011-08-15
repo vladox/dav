@@ -8,7 +8,6 @@ class Sabre_VObject_PropertyTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('PROPNAME', $property->name);
         $this->assertEquals('propvalue', $property->value);
         $this->assertEquals('propvalue', $property->__toString());
-        $this->assertEquals('propvalue', (string)$property);
 
     }
 
@@ -28,7 +27,7 @@ class Sabre_VObject_PropertyTest extends PHPUnit_Framework_TestCase {
         $property = new Sabre_VObject_Property('propname','propvalue');
         $property->parameters[] = new Sabre_VObject_Parameter('paramname','paramvalue');
         
-        $this->assertInstanceOf('Sabre_VObject_Parameter',$property['paramname']);
+        $this->assertType('Sabre_VObject_Parameter',$property['paramname']);
 
     }
 
@@ -37,7 +36,7 @@ class Sabre_VObject_PropertyTest extends PHPUnit_Framework_TestCase {
         $property = new Sabre_VObject_Property('propname','propvalue');
         $property->parameters[] = new Sabre_VObject_Parameter('paramname','paramvalue');
         
-        $this->assertInternalType('null',$property['foo']);
+        $this->assertType('null',$property['foo']);
 
     }
 
@@ -47,7 +46,7 @@ class Sabre_VObject_PropertyTest extends PHPUnit_Framework_TestCase {
         $property->parameters[] = new Sabre_VObject_Parameter('paramname','paramvalue');
         $property->parameters[] = new Sabre_VObject_Parameter('paramname','paramvalue');
         
-        $this->assertInstanceOf('Sabre_VObject_Parameter',$property['paramname']);
+        $this->assertType('Sabre_VObject_Parameter',$property['paramname']);
         $this->assertEquals(2,count($property['paramname']));
 
     }
@@ -58,7 +57,7 @@ class Sabre_VObject_PropertyTest extends PHPUnit_Framework_TestCase {
         $property['paramname'] = 'paramvalue';
 
         $this->assertEquals(1,count($property->parameters));
-        $this->assertInstanceOf('Sabre_VObject_Parameter', $property->parameters[0]);
+        $this->assertType('Sabre_VObject_Parameter', $property->parameters[0]);
         $this->assertEquals('PARAMNAME',$property->parameters[0]->name);
         $this->assertEquals('paramvalue',$property->parameters[0]->value);
 
