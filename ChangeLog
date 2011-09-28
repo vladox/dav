@@ -1,3 +1,40 @@
+1.5.3-stable (2011-09-28)
+	* Fixed: Sabre_DAV_Collection was missing from the includes file.
+	* Fixed: Issue 152. iOS 1.4.2 apparantly requires HTTP/1.1 200 OK to be in
+	  uppercase.
+	* Fixed: Issue 153: Support for files with mixed newline styles in
+	  Sabre_VObject.
+	* Fixed: Issue 159: Automatically converting any vcard and icalendardata
+	  to UTF-8.
+	* Added: Sabre_DAV_SimpleFile class for easy static file creation.
+	* Added: Issue 158: Support for the CARDDAV:supported-address-data
+	  property.
+
+1.5.2-stable (2011-09-21)
+	* Fixed: carddata and calendardata MySQL fields are now of type
+	  'mediumblob'. 'TEXT' was too small sometimes to hold all the data.
+	* Fixed: {DAV:}supported-report-set is now correctly reporting the reports
+	  for IAddressBook.
+	* Added: Sabre_VObject_Property::add() to add duplicate parameters to
+	  properties.
+	* Added: Issue 151: Sabre_CalDAV_ICalendar and Sabre_CalDAV_ICalendarObject
+	  interfaces.
+	* Fixed: Issue 140: Not returning 201 Created if an event cancelled the
+	  creation of a file.
+	* Fixed: Issue 150: Faster URLUtil::encodePath() implementation.
+	* Fixed: Issue 144: Browser plugin could interfere with
+	  TemporaryFileFilterPlugin if it was loaded first.
+	* Added: It's not possible to specify more 'alternate uris' in principal
+	  backends.
+
+1.5.1-stable (2011-08-24)
+	* Fixed: Issue 137. Hiding action interface in HTML browser for
+	  non-collections.
+	* Fixed: addressbook-query is now correctly returned from the
+	  {DAV:}supported-report-set property.
+	* Fixed: Issue 142: Bugs in groupwareserver.php example.
+	* Fixed: Issue 139: Rejecting PUT requests with Content-Range.
+
 1.5.0-stable (2011-08-12)
 	* Added: CardDAV support.
 	* Added: An experimental WebDAV client.

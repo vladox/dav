@@ -69,11 +69,11 @@ $caldavBackend    = new Sabre_CalDAV_Backend_PDO($pdo);
  */
 $nodes = array(
     // /principals
-    new Sabre_DAVACL_PrincipalCollection($principalBackend),
+    new Sabre_CalDAV_Principal_Collection($principalBackend),
     // /calendars
-    new Sabre_CalDAV_CalendarRootNode($authBackend, $caldavBackend),
+    new Sabre_CalDAV_CalendarRootNode($principalBackend, $caldavBackend),
     // /addressbook
-    new Sabre_CardDAV_AddressbookRoot($principalBackend, $carddavBackend),
+    new Sabre_CardDAV_AddressBookRoot($principalBackend, $carddavBackend),
 );
 
 // The object tree needs in turn to be passed to the server class
