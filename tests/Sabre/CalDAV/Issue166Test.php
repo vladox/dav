@@ -37,8 +37,8 @@ HI;
             '/c:iCalendar/c:vcalendar' => array(),
             '/c:iCalendar/c:vcalendar/c:vevent' => array(
                 'time-range' => array(
-                    'start' => new DateTime('2011-12-01'),
-                    'end'   => new DateTime('2012-02-01'),
+                    'start' => new Sabre_DateTime('2011-12-01'),
+                    'end'   => new Sabre_DateTime('2012-02-01'),
                 ),
             ),
         );
