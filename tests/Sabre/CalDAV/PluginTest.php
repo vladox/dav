@@ -400,12 +400,12 @@ END:VCALENDAR';
 
         $this->assertArrayHasKey('{http://calendarserver.org/ns/}calendar-proxy-read-for', $props[0][200]);
         $prop = $props[0][200]['{http://calendarserver.org/ns/}calendar-proxy-read-for'];
-        $this->assertInstanceOf('Sabre_DAV_Property_HrefList', $prop);
+        $this->assertType('Sabre_DAV_Property_HrefList', $prop);
         $this->assertEquals(array('principals/admin'), $prop->getHrefs());
 
         $this->assertArrayHasKey('{http://calendarserver.org/ns/}calendar-proxy-write-for', $props[0][200]);
         $prop = $props[0][200]['{http://calendarserver.org/ns/}calendar-proxy-write-for'];
-        $this->assertInstanceOf('Sabre_DAV_Property_HrefList', $prop);
+        $this->assertType('Sabre_DAV_Property_HrefList', $prop);
         $this->assertEquals(array('principals/admin'), $prop->getHrefs());
 
     }

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Sabre/HTTP/ResponseMock.php';
+require_once 'Sabre/CardDAV/AbstractPluginTest.php';
 
 class Sabre_CardDAV_MultiGetTest extends Sabre_CardDAV_AbstractPluginTest {
 

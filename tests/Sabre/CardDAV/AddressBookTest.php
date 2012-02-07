@@ -31,7 +31,7 @@ class Sabre_CardDAV_AddressBookTest extends PHPUnit_Framework_TestCase {
     function testGetChild() {
 
         $card = $this->ab->getChild('card1');
-        $this->assertInstanceOf('Sabre_CardDAV_Card', $card);
+        $this->assertType('Sabre_CardDAV_Card', $card);
         $this->assertEquals('card1', $card->getName()); 
 
     }

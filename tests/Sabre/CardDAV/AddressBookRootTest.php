@@ -20,7 +20,7 @@ class Sabre_CardDAV_AddressBookRootTest extends PHPUnit_Framework_TestCase {
         $children = $root->getChildren();
         $this->assertEquals(2, count($children));
 
-        $this->assertInstanceOf('Sabre_CardDAV_UserAddressBooks', $children[0]);
+        $this->assertType('Sabre_CardDAV_UserAddressBooks', $children[0]);
         $this->assertEquals('user1', $children[0]->getName());
 
     }

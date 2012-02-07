@@ -156,7 +156,7 @@ class Sabre_VObject_ReaderTest extends PHPUnit_Framework_TestCase {
         $data = "PROPNAME;PARAMNAME:propValue";
         $result = Sabre_VObject_Reader::read($data);
 
-        $this->assertInstanceOf('Sabre_VObject_Property', $result);
+        $this->assertType('Sabre_VObject_Property', $result);
         $this->assertEquals('PROPNAME', $result->name);
         $this->assertEquals('propValue', $result->value);
         $this->assertEquals(1, count($result->parameters));
