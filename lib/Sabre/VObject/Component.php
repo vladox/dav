@@ -9,7 +9,7 @@
  *
  * @package Sabre
  * @subpackage VObject
- * @copyright Copyright (C) 2007-2011 Rooftop Solutions. All rights reserved.
+ * @copyright Copyright (C) 2007-2012 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
@@ -54,6 +54,9 @@ class Sabre_VObject_Component extends Sabre_VObject_Element {
     public function serialize() {
 
         $str = "BEGIN:" . $this->name . "\r\n";
+
+        usort($this->children, array($this, 'childrenSort'));
+
         foreach($this->children as $child) $str.=$child->serialize();
         $str.= "END:" . $this->name . "\r\n";
         
@@ -61,6 +64,56 @@ class Sabre_VObject_Component extends Sabre_VObject_Element {
 
     }
 
+    /**
+     * Sorts the children based on the rules of RFC5545 and RFC6350.
+     *
+     * This is solely used by 'serialize' and will be removed in 1.6.0.
+     *
+     * @param Sabre_VObject_Node $a
+     * @param Sabre_VObject_Node $b 
+     * @return int 
+     */
+    public function childrenSort($a, $b) {
+
+        $sA = $this->sortScore($a);
+        $sB = $this->sortScore($b);
+
+        if ($sA === $sB) return 0;
+
+        return ($sA > $sB) ? -1 : 1;
+
+    }
+
+    /**
+     * Gives a component a 'score' for sorting purposes.
+     *
+     * This is solely used by the childrenSort method.
+     *
+     * A higher score means the item will be higher in the list
+     *
+     * @param Sabre_VObject_Node $a
+     * @return int
+     */ 
+    private function sortScore(Sabre_VObject_Node $n) {
+
+        if ($n instanceof Sabre_VObject_Component) {
+            // We want to encode VTIMEZONE first, this is a personal 
+            // preference.
+            if ($n->name === 'VTIMEZONE') {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            // VCARD version 4.0 wants the VERSION property to appear first
+            if ($n->name === 'VERSION') {
+                return 3;
+            } else {
+                return 2;
+            }
+        }
+
+    }
 
     /**
      * Adds a new componenten or element
@@ -83,13 +136,16 @@ class Sabre_VObject_Component extends Sabre_VObject_Element {
             if (!is_null($itemValue)) {
                 throw new InvalidArgumentException('The second argument must not be specified, when passing a VObject');
             }
+            $item->parent = $this;
             $this->children[] = $item;
         } elseif(is_string($item)) {
 
             if (!is_scalar($itemValue)) {
                 throw new InvalidArgumentException('The second argument must be scalar');
             }
-            $this->children[] = new Sabre_VObject_Property($item,$itemValue);
+            $item = new Sabre_VObject_Property($item,$itemValue);
+            $item->parent = $this;
+            $this->children[] = $item;
 
         } else {
             
@@ -208,16 +264,19 @@ class Sabre_VObject_Component extends Sabre_VObject_Element {
         $overWrite = count($matches)?key($matches):null;
 
         if ($value instanceof Sabre_VObject_Component || $value instanceof Sabre_VObject_Property) {
+            $value->parent = $this;
             if (!is_null($overWrite)) {
                 $this->children[$overWrite] = $value;
             } else {
                 $this->children[] = $value;
             }
         } elseif (is_scalar($value)) {
+            $property = new Sabre_VObject_Property($name,$value);
+            $property->parent = $this;
             if (!is_null($overWrite)) {
-                $this->children[$overWrite] = new Sabre_VObject_Property($name,$value);
+                $this->children[$overWrite] = $property;
             } else {
-                $this->children[] = new Sabre_VObject_Property($name,$value);
+                $this->children[] = $property;
             }
         } else {
             throw new InvalidArgumentException('You must pass a Sabre_VObject_Component, Sabre_VObject_Property or scalar type');
@@ -237,6 +296,7 @@ class Sabre_VObject_Component extends Sabre_VObject_Element {
         foreach($matches as $k=>$child) {
 
             unset($this->children[$k]);
+            $child->parent = null;
 
         }
 
