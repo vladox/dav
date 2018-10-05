@@ -3,6 +3,7 @@
 namespace Sabre\CalDAV;
 
 use DateTimeZone;
+use Sabre\CalDAV\Xml\Request\CalendarMultiGetReport;
 use Sabre\DAV;
 use Sabre\DAV\Exception\BadRequest;
 use Sabre\DAV\INode;

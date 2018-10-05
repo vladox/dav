@@ -3,7 +3,7 @@
 namespace Sabre\DAV\Browser;
 
 use Sabre\DAV;
-use Sabre\DAV\Inode;
+use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\Uri;
 

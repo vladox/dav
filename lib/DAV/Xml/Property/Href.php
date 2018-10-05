@@ -157,7 +157,7 @@ class Href implements Element, HtmlOutput {
 
         }
         if ($hrefs) {
-            return new self($hrefs, false);
+            return new self($hrefs);
         }
 
     }

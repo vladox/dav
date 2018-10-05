@@ -46,6 +46,7 @@ class SchedulingObject extends \Sabre\CalDAV\CalendarObject implements IScheduli
      * @param array $objectData
      */
     function __construct(Backend\SchedulingSupport $caldavBackend, array $objectData) {
+        parent::__construct($caldavBackend, [], $objectData);
 
         $this->caldavBackend = $caldavBackend;
 

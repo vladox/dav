@@ -19,9 +19,7 @@ class LockTokenMatchesRequestUri extends Conflict {
      * Creates the exception
      */
     function __construct() {
-
-        $this->message = 'The locktoken supplied does not match any locks on this entity';
-
+        parent::__construct('The locktoken supplied does not match any locks on this entity');
     }
 
     /**

@@ -26,7 +26,7 @@ class InviteReply implements NotificationInterface {
     /**
      * Timestamp of the notification
      *
-     * @var DateTime
+     * @var \DateTime
      */
     protected $dtStamp;
 
@@ -152,7 +152,7 @@ class InviteReply implements NotificationInterface {
 
         $cs = '{' . CalDAV\Plugin::NS_CALENDARSERVER . '}';
 
-        $this->dtStamp->setTimezone(new \DateTimezone('GMT'));
+        $this->dtStamp->setTimezone(new \DateTimeZone('GMT'));
         $writer->writeElement($cs . 'dtstamp', $this->dtStamp->format('Ymd\\THis\\Z'));
 
         $writer->startElement($cs . 'invite-reply');
